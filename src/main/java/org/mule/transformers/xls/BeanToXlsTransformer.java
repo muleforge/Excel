@@ -28,7 +28,6 @@ public class BeanToXlsTransformer extends AbstractTransformer {
 	private InputStream templateInputStream;
 	
 
-	@Override
 	public void initialise() throws InitialisationException {
 		super.initialise();
 		try{
@@ -38,7 +37,6 @@ public class BeanToXlsTransformer extends AbstractTransformer {
 		}
 	}
 
-	@Override
 	protected Object doTransform(Object src, String encoding) throws TransformerException {
 		Map beans = (Map) src;
 		OutputStream out = null;

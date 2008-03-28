@@ -36,7 +36,6 @@ public class XlsToBeanTransformer extends AbstractTransformer {
 		registerSourceType(byte[].class);
 	}
 	
-	@Override
 	public void initialise() throws InitialisationException {
 		super.initialise();
 		//Initialize beans in map
@@ -50,7 +49,6 @@ public class XlsToBeanTransformer extends AbstractTransformer {
 		}
 	}
 
-	@Override
 	protected Object doTransform(Object src, String encoding) throws TransformerException {
 		try {
 			InputStream data = null;
@@ -83,9 +81,6 @@ public class XlsToBeanTransformer extends AbstractTransformer {
 		return null;
 	}
 	
-	
-	
-	@Override
 	public Object clone() throws CloneNotSupportedException {
         XlsToBeanTransformer clone = (XlsToBeanTransformer) super.clone();
         clone.setMappingBeans(mappingBeans);

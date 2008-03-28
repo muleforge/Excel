@@ -25,7 +25,6 @@ public class XlsRowMessageSplitter extends AbstractMessageSplitter {
 	private XlsSplitter splitter;
 	private static final ThreadLocal propertiesContext = new ThreadLocal();
 
-	@Override
 	protected void initialise(UMOMessage message) {
 		super.initialise(message);
 		// Except message payload input stream and file
@@ -46,7 +45,6 @@ public class XlsRowMessageSplitter extends AbstractMessageSplitter {
 
 	}
 
-	@Override
 	protected UMOMessage getMessagePart(UMOMessage message, UMOEndpoint endpoint) {
 		Map row = splitter.getNextRow();
 		if(row != null){

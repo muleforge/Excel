@@ -52,7 +52,6 @@ public class SimpleXlsSplitter implements XlsSplitter {
 		}
 	}
 	
-	@Override
 	public Map<String, HSSFCell> getNextRow() {
 		Map<String, HSSFCell> rowMap = new HashMap<String, HSSFCell>();
 		if(rowIterator.hasNext()){
@@ -75,13 +74,11 @@ public class SimpleXlsSplitter implements XlsSplitter {
 		this.xlsStream = xlsStream;
 	}
 
-	@Override
 	public Map<String, HSSFCell> getRowRange(int startRow, int endRow) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Map<String, HSSFCell> getSelectedRows(List<Integer> rows) {
 		// TODO Auto-generated method stub
 		return null;
