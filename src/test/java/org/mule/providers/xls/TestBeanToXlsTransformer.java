@@ -27,8 +27,8 @@ public class TestBeanToXlsTransformer extends AbstractTransformerTestCase {
 	private String resultFileName;
 
 	protected void doSetUp() throws Exception {
-		template = "src/test/resources/templates/department.xls";
-		resultFileName="result.xls";
+		template = "src/test/resources/template.xls";
+		resultFileName="target/result.xls";
 	}
 
 	public Object getResultData() {
