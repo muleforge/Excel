@@ -38,6 +38,8 @@ public class XlsToBeanTransformer extends AbstractTransformer {
 	
 	public void initialise() throws InitialisationException {
 		super.initialise();
+		if(mappingBeans == null) throw new IllegalArgumentException("A map of mapping beans must be declared for the transformer");
+		
 		//Initialize beans in map
 		for(Object key : mappingBeans.keySet()){
 			try{
