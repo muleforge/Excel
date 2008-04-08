@@ -82,10 +82,10 @@ public class TestBeanToXlsTransformer extends AbstractTransformerTestCase {
 	public boolean compareResults(Object expected, Object result) {
 		// Write outputstream in a file
 		assertNotNull(result);
-		if (result instanceof ByteArrayOutputStream) {
+		if (result instanceof byte[]) {
 			try {
 				FileOutputStream fileOut = new FileOutputStream(resultFileName);
-				fileOut.write(((ByteArrayOutputStream)result).toByteArray());
+				fileOut.write((byte[])result);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

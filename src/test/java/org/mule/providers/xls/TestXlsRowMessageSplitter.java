@@ -67,7 +67,30 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow4(), C.eq(endpoint1)), message);
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow5(), C.eq(endpoint1)), message);
 	}
+	
+	public void testSplittXlsWithGivenSheet() throws Exception{
+		//Set sheet
+		xlsSplitter.setSheetName("Sheet1");
+        Mock session = MuleTestUtils.getMockSession();
+        UMOMessage message = new MuleMessage(getTestData());
+        assertTrue(xlsSplitter.isMatch(message));
+        session.expect("dispatchEvent", C.args(new ConstraintRow1(), C.eq(endpoint1)));
+        session.expect("dispatchEvent", C.args(new ConstraintRow2(), C.eq(endpoint1)));
+        session.expect("dispatchEvent", C.args(new ConstraintRow3(), C.eq(endpoint1)));
+        session.expect("dispatchEvent", C.args(new ConstraintRow4(), C.eq(endpoint1)));
+        session.expect("dispatchEvent", C.args(new ConstraintRow5(), C.eq(endpoint1)));
+        xlsSplitter.route(message, (UMOSession)session.proxy(), false);
+        session.verify();
+        
+        message = new MuleMessage(getTestData());
+        session.expectAndReturn("sendEvent", C.args(new ConstraintRow1(), C.eq(endpoint1)), message);
+        session.expectAndReturn("sendEvent", C.args(new ConstraintRow2(), C.eq(endpoint1)), message);
+        session.expectAndReturn("sendEvent", C.args(new ConstraintRow3(), C.eq(endpoint1)), message);
+        session.expectAndReturn("sendEvent", C.args(new ConstraintRow4(), C.eq(endpoint1)), message);
+        session.expectAndReturn("sendEvent", C.args(new ConstraintRow5(), C.eq(endpoint1)), message);
+	}
 
+	
 	private class ConstraintRow1 implements Constraint {
 		public boolean eval(Object o) {
 			final UMOMessage message = (UMOMessage) o;
