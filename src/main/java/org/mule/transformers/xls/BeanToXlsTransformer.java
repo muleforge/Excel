@@ -27,30 +27,27 @@ public class BeanToXlsTransformer extends AbstractTransformer {
 	private String template;
 	private InputStream templateInputStream;
 	
-
-	public void initialise() throws InitialisationException {
-		super.initialise();
-		try{
-			templateInputStream = new FileInputStream(template);
-		}catch(Exception e){
-			throw new InitialisationException(e,this);
-		}
-	}
-
 	protected Object doTransform(Object src, String encoding) throws TransformerException {
 		Map beans = (Map) src;
-		OutputStream out = null;
+		ByteArrayOutputStream out = null;
 		try{
+			templateInputStream = new FileInputStream(template);
 			out = new ByteArrayOutputStream();
 			transformer.transformXLS(templateInputStream, beans).write(out);
 		}catch(Exception e){
 			throw new TransformerException(this,e);
 		}
-		return out;
+		return out.toByteArray();
 	}
 	
 	public void setTemplate(String template) {
 		this.template = template;
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		BeanToXlsTransformer clone = (BeanToXlsTransformer) super.clone();
+        clone.setTemplate(template);
+        return clone;
 	}
 
 }
