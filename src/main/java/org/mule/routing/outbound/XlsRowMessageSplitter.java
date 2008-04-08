@@ -23,13 +23,14 @@ import org.mule.umo.endpoint.UMOEndpoint;
 
 public class XlsRowMessageSplitter extends AbstractMessageSplitter {
 	private XlsSplitter splitter;
+	private String sheetName;
 	private static final ThreadLocal propertiesContext = new ThreadLocal();
 
 	protected void initialise(UMOMessage message) {
 		super.initialise(message);
 		// Except message payload input stream and file
 		if (message.getPayload() instanceof InputStream || message.getPayload() instanceof File) {
-			splitter = new SimpleXlsSplitter((InputStream)message.getPayload());
+			splitter = new SimpleXlsSplitter((InputStream)message.getPayload(), sheetName);
 		} else {
 			throw new IllegalArgumentException("The payload for this router must be of type java.io.InputStream or java.io.File");
 		}
@@ -52,6 +53,10 @@ public class XlsRowMessageSplitter extends AbstractMessageSplitter {
 		}else{
 			return null;
 		}
+	}
+
+	public void setSheetName(String sheetName) {
+		this.sheetName = sheetName;
 	}
 	
 	

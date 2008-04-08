@@ -33,10 +33,11 @@ public class SimpleXlsSplitter implements XlsSplitter {
 	private Iterator rowIterator;
 	
 	/**
-	 * Constructor takes the excel sheet as input stream
-	 * @param stream
+	 * Constructor takes the excel sheet as input stream and the sheet
+	 * @param stream input stream
+	 * @param sheetName name of the sheet. If null the first sheet will be used
 	 */
-	public SimpleXlsSplitter(InputStream stream){
+	public SimpleXlsSplitter(InputStream stream, String sheetName){
 		xlsStream = stream;
 		InputStream xls = (InputStream)getXlsStream();
 		try{
@@ -82,5 +83,9 @@ public class SimpleXlsSplitter implements XlsSplitter {
 	public Map<String, HSSFCell> getSelectedRows(List<Integer> rows) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setSheetName(String sheetName) {
+		this.sheetName = sheetName;
 	}
 }
