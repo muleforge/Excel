@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<mule-configuration id="Excel_Module_Splitter_Sample" version="1.0">
+
+    <model name="splitterModel">
+    	<!-- Standard simple XLS Row splitter -->
+        <mule-descriptor name="testXlsRowSplitter1"
+                         implementation="org.mule.components.simple.BridgeComponent">
+        	<inbound-router>
+        		<endpoint address="vm://testXlsSplitter1"/>
+        	</inbound-router>
+        	<outbound-router>
+        		<router className="org.mule.routing.outbound.XlsRowMessageSplitter">
+        			<endpoint address="stream://System.out"/>
+        		</router>
+        	</outbound-router>
+        </mule-descriptor>
+        
+    	<!-- Standard simple XLS Row splitter, but setting a sheet -->
+        <mule-descriptor name="testXlsRowSplitter2"
+                         implementation="org.mule.components.simple.BridgeComponent">
+        	<inbound-router>
+        		<endpoint address="vm://testXlsSplitter2"/>
+        	</inbound-router>
+        	<outbound-router>
+        		<router className="org.mule.routing.outbound.XlsRowMessageSplitter">
+        			<endpoint address="stream://System.out"/>
+        			<properties>
+        				<property name="sheetName" value="AnotherSheet"/>
+        			</properties>
+        		</router>
+        	</outbound-router>
+        </mule-descriptor>
+	</model>
+</mule-configuration>

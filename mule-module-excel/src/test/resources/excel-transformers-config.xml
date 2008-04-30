@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<mule-configuration id="Excel_Module_Splitter_Sample" version="1.0">
+	
+	<transformers>
+		<transformer name="BeanToXlsTransformer" className="org.mule.transformers.xls.BeanToXlsTransformer">
+			<properties>
+				<property name="template" value="src/test/resources/template.xls"/>
+			</properties>
+		</transformer>
+		
+		<transformer name="XlsToBeanTransformer" className="org.mule.transformers.xls.XlsToBeanTransformer">
+			<properties>
+				<property name="mappingFile" value="src/test/resources/xlsMapping.xml" />
+				<map name="mappingBeans">
+					<property name="employees" value="java.util.ArrayList"/>
+				</map>
+			</properties>
+		</transformer>
+		
+	</transformers>
+	
+	<model name="transformerModel">
+        <mule-descriptor name="testBeanToXls"
+                         implementation="org.mule.tck.functional.FunctionalTestComponent">
+        	<inbound-router>
+        		<endpoint address="vm://testBeanToXls" transformers="BeanToXlsTransformer"/>
+        	</inbound-router>
+        </mule-descriptor>
+        
+        <mule-descriptor name="testXlsToBean"
+                         implementation="org.mule.tck.functional.FunctionalTestComponent">
+        	<inbound-router>
+        		<endpoint address="vm://testXlsToBean" transformers="XlsToBeanTransformer"/>
+        	</inbound-router>
+        </mule-descriptor>
+	</model>
+
+</mule-configuration>
