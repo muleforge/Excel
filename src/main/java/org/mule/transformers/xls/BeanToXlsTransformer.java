@@ -12,14 +12,12 @@ package org.mule.transformers.xls;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Map;
 
 import net.sf.jxls.transformer.XLSTransformer;
 
-import org.mule.transformers.AbstractTransformer;
-import org.mule.umo.lifecycle.InitialisationException;
-import org.mule.umo.transformer.TransformerException;
+import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.AbstractTransformer;
 
 public class BeanToXlsTransformer extends AbstractTransformer {
 	// Transformer is used to create XLS
@@ -44,10 +42,10 @@ public class BeanToXlsTransformer extends AbstractTransformer {
 		this.template = template;
 	}
 	
-	public Object clone() throws CloneNotSupportedException {
-		BeanToXlsTransformer clone = (BeanToXlsTransformer) super.clone();
-        clone.setTemplate(template);
-        return clone;
-	}
+//	public Object clone() throws CloneNotSupportedException {
+//		BeanToXlsTransformer clone = (BeanToXlsTransformer) super.clone();
+//        clone.setTemplate(template);
+//        return clone;
+//	}
 
 }

@@ -2,7 +2,7 @@ package org.mule.providers.xls;
 
 import java.io.InputStream;
 
-import org.mule.extras.client.MuleClient;
+import org.mule.module.client.MuleClient;
 import org.mule.tck.FunctionalTestCase;
 import org.mule.util.IOUtils;
 
@@ -14,8 +14,7 @@ public class TestFunctionalXlsRowMessageSplitter extends FunctionalTestCase {
 		return "excel-splitter-config.xml";
 	}
 	
-	protected void doPreFunctionalSetUp() throws Exception {
-		super.doPreFunctionalSetUp();
+	protected void doSetUp() throws Exception {
 		testData= IOUtils.getResourceAsStream("employees.xls", getClass());
 		client = new MuleClient();
 	}

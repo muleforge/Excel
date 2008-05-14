@@ -13,21 +13,37 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.mule.impl.MuleMessage;
-import org.mule.routing.outbound.AbstractMessageSplitter;
-import org.mule.umo.UMOMessage;
-import org.mule.umo.endpoint.UMOEndpoint;
+import org.mule.DefaultMuleMessage;
+import org.mule.api.MuleMessage;
+import org.mule.api.endpoint.OutboundEndpoint;
 
 public class XlsRowMessageSplitter extends AbstractMessageSplitter {
 	private XlsSplitter splitter;
 	private String sheetName;
+	private int startRow;
+	private int endRow;
 	private static final ThreadLocal propertiesContext = new ThreadLocal();
 
-	protected void initialise(UMOMessage message) {
-		super.initialise(message);
+
+	@Override
+	protected void cleanup() {
+		
+	}
+
+	@Override
+	protected MuleMessage getMessagePart(MuleMessage message, OutboundEndpoint arg1) {
+		Map row = splitter.getNextRow();
+		if(row != null){
+			return new DefaultMuleMessage(row, (Map) propertiesContext.get());
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	protected void initialise(MuleMessage message) {
 		// Except message payload input stream and file
 		if (message.getPayload() instanceof InputStream || message.getPayload() instanceof File) {
 			splitter = new SimpleXlsSplitter((InputStream)message.getPayload(), sheetName);
@@ -42,22 +58,30 @@ public class XlsRowMessageSplitter extends AbstractMessageSplitter {
 			props.put(propertyKey, message.getProperty(propertyKey));
 		}
 		propertiesContext.set(props);
-
-
 	}
-
-	protected UMOMessage getMessagePart(UMOMessage message, UMOEndpoint endpoint) {
-		Map row = splitter.getNextRow();
-		if(row != null){
-			return new MuleMessage(row, (Map) propertiesContext.get());
-		}else{
-			return null;
-		}
-	}
-
+	
 	public void setSheetName(String sheetName) {
 		this.sheetName = sheetName;
 	}
 	
+	public int getStartRow() {
+		return startRow;
+	}
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+	public int getEndRow() {
+		return endRow;
+	}
+
+
+
+	public void setEndRow(int endRow) {
+		this.endRow = endRow;
+	}
+
+
 	
 }

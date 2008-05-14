@@ -1,41 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
-                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+<mule xmlns="http://www.mulesource.org/schema/mule/core/2.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:stdio="http://www.mulesource.org/schema/mule/stdio/2.0"
+       xmlns:spring="http://www.springframework.org/schema/beans"
+       xmlns:vm="http://www.mulesource.org/schema/mule/vm/2.0"
+       xmlns:xls="http://www.mulesource.org/schema/mule/excel/2.0"
+       xsi:schemaLocation="
+       		   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+               http://www.mulesource.org/schema/mule/core/2.0 http://www.mulesource.org/schema/mule/core/2.0/mule.xsd
+               http://www.mulesource.org/schema/mule/stdio/2.0 http://www.mulesource.org/schema/mule/stdio/2.0/mule-stdio.xsd
+               http://www.mulesource.org/schema/mule/excel/2.0 mule-excel.xsd
+               http://www.mulesource.org/schema/mule/vm/2.0 http://www.mulesource.org/schema/mule/vm/2.0/mule-vm.xsd">
 
-<mule-configuration id="Excel_Module_Splitter_Sample" version="1.0">
+	<xls:bean-to-xls-transformer name="BeanToXlsTransformer" template="src/test/resources/template.xls"/>
 	
-	<transformers>
-		<transformer name="BeanToXlsTransformer" className="org.mule.transformers.xls.BeanToXlsTransformer">
-			<properties>
-				<property name="template" value="src/test/resources/template.xls"/>
-			</properties>
-		</transformer>
-		
-		<transformer name="XlsToBeanTransformer" className="org.mule.transformers.xls.XlsToBeanTransformer">
-			<properties>
-				<property name="mappingFile" value="src/test/resources/xlsMapping.xml" />
-				<map name="mappingBeans">
-					<property name="employees" value="java.util.ArrayList"/>
-				</map>
-			</properties>
-		</transformer>
-		
-	</transformers>
+	<xls:xls-to-bean-transformer name="XlsToBeanTransformer" mappingFile="src/test/resources/xlsMapping.xml">
+		<xls:mapping-bean key="employees" value="java.util.ArrayList"/>
+	</xls:xls-to-bean-transformer>
 	
 	<model name="transformerModel">
-        <mule-descriptor name="testBeanToXls"
-                         implementation="org.mule.tck.functional.FunctionalTestComponent">
-        	<inbound-router>
-        		<endpoint address="vm://testBeanToXls" transformers="BeanToXlsTransformer"/>
-        	</inbound-router>
-        </mule-descriptor>
-        
-        <mule-descriptor name="testXlsToBean"
-                         implementation="org.mule.tck.functional.FunctionalTestComponent">
-        	<inbound-router>
-        		<endpoint address="vm://testXlsToBean" transformers="XlsToBeanTransformer"/>
-        	</inbound-router>
-        </mule-descriptor>
+        <service name="testBeanToXls">
+        	<inbound>
+        		<vm:inbound-endpoint path="testBeanToXls" transformer-refs="BeanToXlsTransformer"/>
+        	</inbound>
+        	<component class="org.mule.tck.functional.FunctionalTestComponent"/>
+       	</service>
+        <service name="testXlsToBean">
+        	<inbound>
+        		<vm:inbound-endpoint  path="testXlsToBean" transformer-refs="XlsToBeanTransformer"/>
+        	</inbound>
+        	<component class="org.mule.tck.functional.FunctionalTestComponent"/>
+       	</service>
 	</model>
-
-</mule-configuration>
+</mule>

@@ -10,18 +10,17 @@
 package org.mule.providers.xls;
 
 import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.mule.impl.MuleMessage;
-import org.mule.impl.endpoint.MuleEndpointURI;
+import org.mule.DefaultMuleMessage;
+import org.mule.api.MuleMessage;
+import org.mule.api.MuleSession;
+import org.mule.api.endpoint.OutboundEndpoint;
+import org.mule.endpoint.MuleEndpointURI;
 import org.mule.routing.outbound.XlsRowMessageSplitter;
 import org.mule.tck.AbstractMuleTestCase;
 import org.mule.tck.MuleTestUtils;
-import org.mule.umo.UMOMessage;
-import org.mule.umo.UMOSession;
-import org.mule.umo.endpoint.UMOEndpoint;
 import org.mule.util.IOUtils;
 
 import com.mockobjects.constraint.Constraint;
@@ -29,14 +28,14 @@ import com.mockobjects.dynamic.C;
 import com.mockobjects.dynamic.Mock;
 
 public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
-	private UMOEndpoint endpoint1;
+	private OutboundEndpoint endpoint1;
 	private XlsRowMessageSplitter xlsSplitter;
 
 	// @Override
 	protected void doSetUp() throws Exception {
 		// setup endpoints
-		endpoint1 = getTestEndpoint("Test1Endpoint", UMOEndpoint.ENDPOINT_TYPE_SENDER);
-		endpoint1.setEndpointURI(new MuleEndpointURI("test://endpointUri.1"));
+		endpoint1 = getTestOutboundEndpoint("Test1Endpoint");
+		//endpoint1.setEndpointURI(new MuleEndpointURI("test://endpointUri.1"));
 
 		// setup splitter
 		xlsSplitter = new XlsRowMessageSplitter();
@@ -50,17 +49,17 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
 
 	public void testSplittXls() throws Exception{
         Mock session = MuleTestUtils.getMockSession();
-        UMOMessage message = new MuleMessage(getTestData());
+        MuleMessage message = new DefaultMuleMessage(getTestData());
         assertTrue(xlsSplitter.isMatch(message));
         session.expect("dispatchEvent", C.args(new ConstraintRow1(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow2(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow3(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow4(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow5(), C.eq(endpoint1)));
-        xlsSplitter.route(message, (UMOSession)session.proxy(), false);
+        xlsSplitter.route(message, (MuleSession)session.proxy(), false);
         session.verify();
         
-        message = new MuleMessage(getTestData());
+        message = new DefaultMuleMessage(getTestData());
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow1(), C.eq(endpoint1)), message);
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow2(), C.eq(endpoint1)), message);
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow3(), C.eq(endpoint1)), message);
@@ -72,17 +71,17 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
 		//Set sheet
 		xlsSplitter.setSheetName("Sheet1");
         Mock session = MuleTestUtils.getMockSession();
-        UMOMessage message = new MuleMessage(getTestData());
+        MuleMessage message = new DefaultMuleMessage(getTestData());
         assertTrue(xlsSplitter.isMatch(message));
         session.expect("dispatchEvent", C.args(new ConstraintRow1(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow2(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow3(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow4(), C.eq(endpoint1)));
         session.expect("dispatchEvent", C.args(new ConstraintRow5(), C.eq(endpoint1)));
-        xlsSplitter.route(message, (UMOSession)session.proxy(), false);
+        xlsSplitter.route(message, (MuleSession)session.proxy(), false);
         session.verify();
         
-        message = new MuleMessage(getTestData());
+        message = new DefaultMuleMessage(getTestData());
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow1(), C.eq(endpoint1)), message);
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow2(), C.eq(endpoint1)), message);
         session.expectAndReturn("sendEvent", C.args(new ConstraintRow3(), C.eq(endpoint1)), message);
@@ -93,7 +92,7 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
 	
 	private class ConstraintRow1 implements Constraint {
 		public boolean eval(Object o) {
-			final UMOMessage message = (UMOMessage) o;
+			final MuleMessage message = (MuleMessage) o;
 			final Object payload = message.getPayload();
 			assertNotNull(payload);
 			assertTrue("Wrong class type for node.", payload instanceof Map);
@@ -107,7 +106,7 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
 	}
 	private class ConstraintRow2 implements Constraint {
 		public boolean eval(Object o) {
-			final UMOMessage message = (UMOMessage) o;
+			final MuleMessage message = (MuleMessage) o;
 			final Object payload = message.getPayload();
 			assertNotNull(payload);
 			assertTrue("Wrong class type for node.", payload instanceof Map);
@@ -121,7 +120,7 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
 	}
 	private class ConstraintRow3 implements Constraint {
 		public boolean eval(Object o) {
-			final UMOMessage message = (UMOMessage) o;
+			final MuleMessage message = (MuleMessage) o;
 			final Object payload = message.getPayload();
 			assertNotNull(payload);
 			assertTrue("Wrong class type for node.", payload instanceof Map);
@@ -135,7 +134,7 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
 	}
 	private class ConstraintRow4 implements Constraint {
 		public boolean eval(Object o) {
-			final UMOMessage message = (UMOMessage) o;
+			final MuleMessage message = (MuleMessage) o;
 			final Object payload = message.getPayload();
 			assertNotNull(payload);
 			assertTrue("Wrong class type for node.", payload instanceof Map);
@@ -149,7 +148,7 @@ public class TestXlsRowMessageSplitter extends AbstractMuleTestCase {
 	}
 	private class ConstraintRow5 implements Constraint {
 		public boolean eval(Object o) {
-			final UMOMessage message = (UMOMessage) o;
+			final MuleMessage message = (MuleMessage) o;
 			final Object payload = message.getPayload();
 			assertNotNull(payload);
 			assertTrue("Wrong class type for node.", payload instanceof Map);

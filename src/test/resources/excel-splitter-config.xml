@@ -1,37 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
-                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+<mule xmlns="http://www.mulesource.org/schema/mule/core/2.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:stdio="http://www.mulesource.org/schema/mule/stdio/2.0"
+       xmlns:vm="http://www.mulesource.org/schema/mule/vm/2.0"
+       xmlns:xls="http://www.mulesource.org/schema/mule/excel/2.0"
+       xsi:schemaLocation="
+               http://www.mulesource.org/schema/mule/core/2.0 http://www.mulesource.org/schema/mule/core/2.0/mule.xsd
+               http://www.mulesource.org/schema/mule/stdio/2.0 http://www.mulesource.org/schema/mule/stdio/2.0/mule-stdio.xsd
+               http://www.mulesource.org/schema/mule/excel/2.0 mule-excel.xsd
+               http://www.mulesource.org/schema/mule/vm/2.0 http://www.mulesource.org/schema/mule/vm/2.0/mule-vm.xsd">
 
-<mule-configuration id="Excel_Module_Splitter_Sample" version="1.0">
 
     <model name="splitterModel">
     	<!-- Standard simple XLS Row splitter -->
-        <mule-descriptor name="testXlsRowSplitter1"
-                         implementation="org.mule.components.simple.BridgeComponent">
-        	<inbound-router>
-        		<endpoint address="vm://testXlsSplitter1"/>
-        	</inbound-router>
-        	<outbound-router>
-        		<router className="org.mule.routing.outbound.XlsRowMessageSplitter">
-        			<endpoint address="stream://System.out"/>
-        		</router>
-        	</outbound-router>
-        </mule-descriptor>
-        
+    	<service name="testXlsRowSplitter1">
+    		<inbound>
+    			<vm:inbound-endpoint address="vm://testXlsSplitter1"/>
+    		</inbound>
+    		<outbound>
+	    		<xls:row-splitter>
+	    			<stdio:outbound-endpoint system="OUT"/>
+	    		</xls:row-splitter>
+    		</outbound>
+    	</service>
+    	
     	<!-- Standard simple XLS Row splitter, but setting a sheet -->
-        <mule-descriptor name="testXlsRowSplitter2"
-                         implementation="org.mule.components.simple.BridgeComponent">
-        	<inbound-router>
-        		<endpoint address="vm://testXlsSplitter2"/>
-        	</inbound-router>
-        	<outbound-router>
-        		<router className="org.mule.routing.outbound.XlsRowMessageSplitter">
-        			<endpoint address="stream://System.out"/>
-        			<properties>
-        				<property name="sheetName" value="AnotherSheet"/>
-        			</properties>
-        		</router>
-        	</outbound-router>
-        </mule-descriptor>
-	</model>
-</mule-configuration>
+    	<service name="testXlsRowSplitter2">
+    		<inbound>
+    			<vm:inbound-endpoint address="vm://testXlsSplitter2"/>
+    		</inbound>
+    		<outbound>
+	    		<xls:row-splitter sheetName="AnotherSheet">
+	    			<stdio:outbound-endpoint system="OUT"/>
+	    		</xls:row-splitter>
+    		</outbound>
+    	</service>
+   	</model>
+</mule>

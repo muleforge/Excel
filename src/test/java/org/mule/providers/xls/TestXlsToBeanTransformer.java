@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mule.api.transformer.Transformer;
 import org.mule.providers.xls.test.model.Employee;
-import org.mule.tck.AbstractTransformerTestCase;
+import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transformers.xls.XlsToBeanTransformer;
-import org.mule.umo.transformer.UMOTransformer;
 import org.mule.util.IOUtils;
 
 public class TestXlsToBeanTransformer extends AbstractTransformerTestCase {
@@ -45,7 +45,7 @@ public class TestXlsToBeanTransformer extends AbstractTransformerTestCase {
 	}
 
 	@Override
-	public UMOTransformer getRoundTripTransformer() throws Exception {
+	public Transformer getRoundTripTransformer() throws Exception {
 		return null;
 	}
 
@@ -55,7 +55,7 @@ public class TestXlsToBeanTransformer extends AbstractTransformerTestCase {
 	}
 
 	@Override
-	public UMOTransformer getTransformer() throws Exception {
+	public Transformer getTransformer() throws Exception {
 		XlsToBeanTransformer t = new XlsToBeanTransformer();
 		Map mappingBeans = new HashMap();
 		mappingBeans.put("employees", "java.util.ArrayList");

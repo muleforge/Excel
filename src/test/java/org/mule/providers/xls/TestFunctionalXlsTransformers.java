@@ -1,18 +1,16 @@
 package org.mule.providers.xls;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.mule.extras.client.MuleClient;
+import org.mule.api.MuleMessage;
+import org.mule.module.client.MuleClient;
 import org.mule.providers.xls.test.model.Department;
 import org.mule.providers.xls.test.model.Employee;
 import org.mule.tck.FunctionalTestCase;
-import org.mule.umo.UMOMessage;
 import org.mule.util.IOUtils;
 
 public class TestFunctionalXlsTransformers extends FunctionalTestCase {
@@ -22,20 +20,19 @@ public class TestFunctionalXlsTransformers extends FunctionalTestCase {
 		return "excel-transformers-config.xml";
 	}
 	
-	protected void doPreFunctionalSetUp() throws Exception {
-		super.doPreFunctionalSetUp();
+	protected void doSetUp() throws Exception {
 		client = new MuleClient();
 	}
 
 	public void testTransformBeanToXls() throws Exception{
-		UMOMessage msg = client.send("vm://testBeanToXls",getTestData() , null);
+		MuleMessage msg = client.send("vm://testBeanToXls",getTestData() , null);
 		assertNotNull(msg.getPayload());
 		logger.debug(msg.getPayload());
 	}
 	
 	public void testTransformXlsToBean() throws Exception{
     	InputStream testData = IOUtils.getResourceAsStream("departmentdata.xls", getClass());
-		UMOMessage msg = client.send("vm://testXlsToBean",testData , null);
+		MuleMessage msg = client.send("vm://testXlsToBean",testData , null);
 		assertNotNull(msg.getPayload());
 		logger.debug(msg.getPayload());
 	}

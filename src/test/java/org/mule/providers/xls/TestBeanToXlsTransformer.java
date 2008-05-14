@@ -9,18 +9,17 @@
  */
 package org.mule.providers.xls;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mule.api.transformer.Transformer;
 import org.mule.providers.xls.test.model.Department;
 import org.mule.providers.xls.test.model.Employee;
-import org.mule.tck.AbstractTransformerTestCase;
+import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transformers.xls.BeanToXlsTransformer;
-import org.mule.umo.transformer.UMOTransformer;
 
 public class TestBeanToXlsTransformer extends AbstractTransformerTestCase {
 	private String template;
@@ -35,7 +34,7 @@ public class TestBeanToXlsTransformer extends AbstractTransformerTestCase {
 		return "Dummy";
 	}
 
-	public UMOTransformer getRoundTripTransformer() throws Exception {
+	public Transformer getRoundTripTransformer() throws Exception {
 		return null;
 	}
 
@@ -72,7 +71,7 @@ public class TestBeanToXlsTransformer extends AbstractTransformerTestCase {
 		return beans;
 	}
 
-	public UMOTransformer getTransformer() throws Exception {
+	public Transformer getTransformer() throws Exception {
 		BeanToXlsTransformer t = new BeanToXlsTransformer();
 		t.setTemplate(template);
 		t.initialise();
