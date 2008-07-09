@@ -33,7 +33,7 @@
     <xsd:complexType name="xlsToBeanTransformerType">
     	<xsd:complexContent>
     		<xsd:extension base="mule:abstractTransformerType">
-    			<xsd:sequence>
+    			<xsd:sequence maxOccurs="unbounded" minOccurs="0">
     				<xsd:element name="mapping-bean" type="mule:keyValueType"></xsd:element>
     			</xsd:sequence>
     			<xsd:attribute name="mappingFile"
