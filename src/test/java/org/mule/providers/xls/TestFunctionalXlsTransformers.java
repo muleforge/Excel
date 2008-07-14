@@ -37,6 +37,13 @@ public class TestFunctionalXlsTransformers extends FunctionalTestCase {
 		logger.debug(msg.getPayload());
 	}
 	
+	public void testTransformXlsToBean2() throws Exception{
+    	InputStream testData = IOUtils.getResourceAsStream("departmentdata.xls", getClass());
+		MuleMessage msg = client.send("vm://testXlsToBean",testData , null);
+		assertNotNull(msg.getPayload());
+		logger.debug(msg.getPayload());
+	}
+	
 	private Map getTestData(){
 		Department department = new Department("IT");
 		Calendar calendar = Calendar.getInstance();

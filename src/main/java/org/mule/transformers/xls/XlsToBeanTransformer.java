@@ -29,6 +29,8 @@ public class XlsToBeanTransformer extends AbstractTransformer {
 	private volatile String mappingFile;
 	// Map of mapping beans
 	private volatile Map mappingBeans;
+	//Map of result mapping beans
+	private volatile Map resultMappingBeans = new HashMap();
 
 	public XlsToBeanTransformer() {
 		registerSourceType(File.class);
@@ -40,14 +42,12 @@ public class XlsToBeanTransformer extends AbstractTransformer {
 		super.initialise();
 		if(mappingBeans == null) throw new IllegalArgumentException("A map of mapping beans must be declared for the transformer");
 		
+	}
+	
+	private void initialiseBeanMap() throws IllegalAccessException, ClassNotFoundException, InstantiationException{
 		//Initialize beans in map
 		for(Object key : mappingBeans.keySet()){
-			try{
-				mappingBeans.put(key, Class.forName(mappingBeans.get(key).toString()).newInstance());
-			}catch(Exception e){
-				logger.error(e);
-				throw new InitialisationException(e,this);
-			}
+			resultMappingBeans.put(key, Class.forName(mappingBeans.get(key).toString()).newInstance());
 		}
 	}
 
@@ -64,17 +64,22 @@ public class XlsToBeanTransformer extends AbstractTransformer {
 
 			InputStream mappingXml = new FileInputStream(new File(mappingFile));
 			XLSReader mainReader = ReaderBuilder.buildFromXML(mappingXml);
+			
+			initialiseBeanMap();
+			
 			//Temp map contains filled instances of the XLS
 			Map tempMap = new HashMap();
-			tempMap.putAll(mappingBeans);
+			tempMap.putAll(resultMappingBeans);
+			//Clear resultMappingBeans in order to remove old values
+			resultMappingBeans.clear();
 			XLSReadStatus readStatus = mainReader.read(data, tempMap);
 			if (readStatus.isStatusOK()){
 				//The result map contains temporary instances. Return only the mapped beans
 				//Therefore update all containing beans in mappingBeans
 				for(Object key : mappingBeans.keySet()){
-					mappingBeans.put(key, tempMap.get(key));
+					resultMappingBeans.put(key, tempMap.get(key));
 				}
-				return mappingBeans;
+				return resultMappingBeans;
 			}
 		} catch (Exception e) {
 			logger.error(e);
