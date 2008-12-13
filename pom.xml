@@ -8,9 +8,9 @@
 	<name>Excel</name>
 	<description>Excel Module to read and write excel files.</description>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.4.4-SNAPSHOT</version>
 	<properties>
-		<muleVersion>1.4.1</muleVersion>
+		<muleVersion>1.4.4</muleVersion>
 		<shortId>EXCEL</shortId>
 		<domainName>excel</domainName>
 	</properties>
