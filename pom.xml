@@ -10,7 +10,7 @@
 	<version>2.1.2</version>
 
 	<properties>
-		<muleVersion>2.1.1</muleVersion>
+		<muleVersion>2.1.2</muleVersion>
 		<shortId>EXCEL</shortId>
 		<domainName>excel</domainName>
 	</properties>
@@ -63,6 +63,7 @@
 						<descriptor>assembly.xml</descriptor>
 					</descriptors>
 					<appendAssemblyId>false</appendAssemblyId>
+                    <tarLongFileMode>gnu</tarLongFileMode>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -192,11 +193,7 @@
 			<version>${muleVersion}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-stream</artifactId>
-			<version>${muleVersion}</version>
-			</dependency>-->
+
 		<!-- JXLS Libraray -->
 		<dependency>
 			<groupId>net.sf.jxls</groupId>
